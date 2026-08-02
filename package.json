@@ -9,7 +9,8 @@
     "lint": "eslint",
     "fetch-prices": "tsx scripts/fetch-prices.ts",
     "auto-publish": "tsx scripts/auto-publish.ts",
-    "set-price": "tsx scripts/set-price.ts"
+    "set-price": "tsx scripts/set-price.ts",
+    "add-deal": "tsx scripts/add-deal.ts"
   },
   "dependencies": {
     "next": "16.2.12",
