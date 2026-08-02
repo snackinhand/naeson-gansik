@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { assertWithinRateLimit } from "./rateLimit";
+import { assertWithinRateLimit, recordCooldownViolation } from "./rateLimit";
 
 const DOMAIN = "https://api-gateway.coupang.com";
 
@@ -51,12 +51,34 @@ async function request<T>(method: string, pathWithQuery: string, body?: unknown)
     body: body ? JSON.stringify(body) : undefined,
   });
 
+  const text = await res.text();
+
   if (!res.ok) {
-    const text = await res.text();
     throw new Error(`쿠팡 API 요청 실패 (${res.status}): ${text}`);
   }
 
-  return res.json() as Promise<T>;
+  let json: { rCode?: string; rMessage?: string };
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`쿠팡 API 응답 파싱 실패: ${text}`);
+  }
+
+  // 쿠팡은 호출 제한 초과 같은 실제 오류도 HTTP 200으로 감싸서 rCode에만 담아 보낸다.
+  // rCode가 성공("0")이 아니면 res.ok와 무관하게 반드시 여기서 걸러야 한다.
+  if (json.rCode && json.rCode !== "0") {
+    const message = json.rMessage ?? "";
+    if (message.includes("시간당") || message.includes("초과")) {
+      const timeMatch = message.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
+      const until = timeMatch
+        ? new Date(`${timeMatch[1]}Z`)
+        : new Date(Date.now() + 2 * 60 * 60 * 1000);
+      recordCooldownViolation(until, message);
+    }
+    throw new Error(`쿠팡 API 오류 (rCode ${json.rCode}): ${message}`);
+  }
+
+  return json as T;
 }
 
 export interface CoupangProduct {

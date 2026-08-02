@@ -2,7 +2,43 @@ import fs from "fs";
 import path from "path";
 
 const STATE_PATH = path.join(process.cwd(), ".coupang-rate-limit.json");
+const COOLDOWN_PATH = path.join(process.cwd(), ".coupang-cooldown.json");
 const WINDOW_MS = 60 * 60 * 1000;
+
+interface Cooldown {
+  until: string;
+  reason: string;
+}
+
+function loadCooldown(): Cooldown | null {
+  try {
+    return JSON.parse(fs.readFileSync(COOLDOWN_PATH, "utf-8"));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 쿠팡이 "시간당 사용 횟수 초과" 같은 실제 위반 응답을 줬을 때 기록해두는 서버측
+ * 쿨다운. 우리 쪽 롤링 카운터(assertWithinRateLimit)와 별개로, 쿠팡이 알려준
+ * "이 시각 이후 재시도" 시각이 지나기 전까지는 어떤 호출도 절대 나가지 않게 막는다.
+ */
+export function recordCooldownViolation(until: Date, reason: string): void {
+  const data: Cooldown = { until: until.toISOString(), reason };
+  fs.writeFileSync(COOLDOWN_PATH, JSON.stringify(data, null, 2));
+}
+
+export function assertNotInCooldown(): void {
+  const cooldown = loadCooldown();
+  if (!cooldown) return;
+  const until = new Date(cooldown.until).getTime();
+  if (Date.now() < until) {
+    throw new Error(
+      `쿠팡 API 쿨다운 중이라 호출을 막았습니다 (${cooldown.reason}). ` +
+        `${cooldown.until} 이후 다시 시도하세요.`
+    );
+  }
+}
 
 /**
  * 쿠팡 검색 API의 실제 운영 제한은 "시간당 10회, 3회 초과 시 파트너스 계정 자체가
@@ -29,6 +65,8 @@ function saveTimestamps(timestamps: number[]) {
  * 안전 한도에 닿으면 스크립트를 그냥 멈추는 쪽이 몇 시간 동안 잠자기보다 안전하다).
  */
 export function assertWithinRateLimit(): void {
+  assertNotInCooldown();
+
   const now = Date.now();
   const recent = loadTimestamps().filter((t) => now - t < WINDOW_MS);
 
