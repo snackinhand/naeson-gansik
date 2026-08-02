@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "내손의간식 - 간식 핫딜 모음",
-  description: "진짜 저렴할 때만 소개하는 간식 특가 모음",
+  title: "내손의간식 - 무인매장 매입 단가보다 싼 쿠팡 간식",
+  description: "도매 매입가보다 쿠팡이 더 쌀 때만 알려주는 무인매장 사장님을 위한 실시간 매입 특가",
 };
 
 export default function RootLayout({

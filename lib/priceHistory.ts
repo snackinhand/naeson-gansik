@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { searchProducts, type CoupangProduct } from "./coupang";
+import { searchProducts, itemKey, type CoupangProduct } from "./coupang";
 import type { PriceHistory } from "./types";
 
 const HISTORY_PATH = path.join(process.cwd(), "data", "price-history.json");
@@ -55,7 +55,7 @@ export async function collectPriceSnapshots(): Promise<PriceSnapshotResult[]> {
     }
 
     products.forEach((product) => {
-      const id = String(product.productId);
+      const id = itemKey(product);
       const snapshots = history[id] ?? [];
       snapshots.push({ date: today(), price: product.productPrice });
       history[id] = snapshots;

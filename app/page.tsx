@@ -11,7 +11,7 @@ export default function Home() {
           내손의간식
         </h1>
         <p className="mt-2 text-sm text-zinc-500">
-          진짜 저렴할 때만 소개하는 간식 특가 모음
+          무인매장 도매 매입가보다 쿠팡이 더 쌀 때만 올라오는 실시간 매입 특가
         </p>
       </header>
       <DealBoard deals={deals} />

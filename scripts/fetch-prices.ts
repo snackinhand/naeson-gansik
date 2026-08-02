@@ -1,5 +1,6 @@
 import path from "path";
 import { collectPriceSnapshots, today } from "../lib/priceHistory";
+import { itemKey } from "../lib/coupang";
 
 try {
   process.loadEnvFile(path.join(process.cwd(), ".env.local"));
@@ -34,7 +35,7 @@ async function main() {
     );
     hot.forEach((c) => {
       const snippet = {
-        id: String(c.product.productId),
+        id: itemKey(c.product),
         title: c.product.productName,
         image: c.product.productImage,
         category: c.category,

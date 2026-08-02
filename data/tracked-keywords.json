@@ -1,6 +1,24 @@
 [
-  { "keyword": "포카칩", "category": "과자" },
-  { "keyword": "초코파이", "category": "초콜릿" },
-  { "keyword": "견과류 선물세트", "category": "견과류" },
-  { "keyword": "탄산음료 묶음", "category": "음료" }
+  { "keyword": "코카콜라 오리지널 300ml", "category": "음료" },
+  { "keyword": "밀키스 340ml", "category": "음료" },
+  { "keyword": "파워에이드 퍼플스톰 600ml", "category": "음료" },
+  { "keyword": "닥터페퍼 제로 350ml", "category": "음료" },
+  { "keyword": "비타500 잔망루피 콜라겐", "category": "음료" },
+  { "keyword": "팔도 뽀로로 음료", "category": "음료" },
+  { "keyword": "피크닉 제로 청포도", "category": "음료" },
+  { "keyword": "이디야 디카페인라떼", "category": "음료" },
+  { "keyword": "뽀로로 유기농 보리차", "category": "음료" },
+  { "keyword": "해태 포도봉봉", "category": "음료" },
+  { "keyword": "오레오 화이트크림", "category": "과자" },
+  { "keyword": "바나나킥", "category": "과자" },
+  { "keyword": "콘칩 초당옥수수", "category": "과자" },
+  { "keyword": "브이콘 옥수수", "category": "과자" },
+  { "keyword": "크라운 카라멜콘", "category": "과자" },
+  { "keyword": "칙촉", "category": "과자" },
+  { "keyword": "닥터유 다이제 초코", "category": "과자" },
+  { "keyword": "오뚜기 뿌셔뿌셔", "category": "과자" },
+  { "keyword": "삼양 볶음 간짬뽕", "category": "과자" },
+  { "keyword": "마이쭈 애플망고", "category": "기타" },
+  { "keyword": "트롤리 트로픽오스 젤리", "category": "기타" },
+  { "keyword": "비요뜨 크런치볼", "category": "기타" }
 ]

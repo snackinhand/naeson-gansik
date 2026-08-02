@@ -37,8 +37,11 @@ export function DealCard({ deal }: { deal: Deal }) {
           )}
         </div>
         {deal.originalPrice > deal.price && (
-          <span className="text-xs text-zinc-400 line-through">
-            {deal.originalPrice.toLocaleString()}원
+          <span className="text-xs text-zinc-400">
+            도매 매입가{" "}
+            <span className="line-through">
+              {deal.originalPrice.toLocaleString()}원
+            </span>
           </span>
         )}
         <a

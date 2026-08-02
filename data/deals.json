@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "9294392232-21319448675",
+    "title": "롯데-밀키스340ml(24캔)",
+    "image": "https://ads-partners.coupang.com/image1/4kjWfYMkFGsjeJlR4nUfwow1WfbJs7156n8uZWj9Pj-0Rff3wiqGGUFA6llEGnWRVf_u2VMmLuETgN9GUye2Tl-S6OojwdiZwo5ikHPWHlbE4NpVQl5yx50qgYXZoE5AA_QFit32Yzp1i6HyZNKvpbOZOD6dM-rLmK2zD81MjPH-w5G-3vIJkUzZ0HX3UYqAjn84ki5TvnFfFlE4YRcFrSk2MXtZGYHkTzsTlcD8RWHC7Fr_sbcA6Yl8vUNpelnMr3dDquyQeBid7HYYBd5vTpt8X57G7qz90AJVo969Ma8_-9kse86GbEU6MhH93MCSPzS6PQ==",
+    "category": "음료",
+    "price": 10250,
+    "originalPrice": 14256,
+    "discountRate": 28,
+    "isAllTimeLow": false,
+    "url": "https://link.coupang.com/re/AFFSDP?lptag=AF7319242&pageKey=9294392232&itemId=21319448675&vendorItemId=95753287214&traceid=V0-153-20c3e673f1616077&requestid=20260803001639613206524227&token=31850C%7CMIXED",
+    "updatedAt": "2026-08-02"
+  },
+  {
+    "id": "8106313335-15193419611",
+    "title": "파워에이드 퍼플스톰, 600ml, 10개",
+    "image": "https://ads-partners.coupang.com/image1/VsmEk35NUKcdXz1tVq4tTZZNj6LpKBWUIHOEjBI1rgwumJNI1THDraEL4N-8tn_SSEgrSZstNOwPKNg-mfDgANW9qzk2MvmW0a2oFlsM6iPBMIXpOVqDBcSkoNzykuyLJebTWIKF-8416cLkRg8ewqPRw-2oRNU1lbQ0n1sUpj_G4O64Ch5ys-FpoduJH-rDMJEDltTXu4Qt0d4m3-5YLg7fvWripL9zUmNLhou-s8L4OzC7ZuY-OK8rsMefHkL4BzomnLyNSIEvoqO_HQjEFNRcoH3OuqafY2JFXHCfzUXtcHfSq3K3Dw61",
+    "category": "음료",
+    "price": 6170,
+    "originalPrice": 8050,
+    "discountRate": 23,
+    "isAllTimeLow": false,
+    "url": "https://link.coupang.com/re/AFFSDP?lptag=AF7319242&pageKey=8106313335&itemId=15193419611&vendorItemId=92523896768&traceid=V0-153-dd63ecabe5524226&clickBeacon=29263380-8e85-11f1-91f0-91d4597ffe8a%7E3&requestid=20260803001639716091475500&token=31850C%7CMIXED",
+    "updatedAt": "2026-08-02"
+  }
+]

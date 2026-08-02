@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { collectPriceSnapshots, today } from "../lib/priceHistory";
+import { itemKey } from "../lib/coupang";
 import type { Deal, ReferencePrices, Overrides } from "../lib/types";
 
 try {
@@ -31,7 +32,7 @@ async function main() {
   const unregistered = new Map<string, { title: string; price: number }>();
 
   for (const { category, product } of results) {
-    const id = String(product.productId);
+    const id = itemKey(product);
     if (excludedIds.has(id)) continue;
 
     const reference = referencePrices[id];

@@ -62,6 +62,18 @@ export interface CoupangProduct {
   productUrl: string;
   isRocket: boolean;
   isFreeShipping: boolean;
+  /** productUrl에서 추출한 옵션(구성/용량) 단위 식별자. 같은 productId라도 itemId가 다르면 다른 구성이다. */
+  itemId: string;
+}
+
+interface RawCoupangProduct {
+  productId: number;
+  productName: string;
+  productImage: string;
+  productPrice: number;
+  productUrl: string;
+  isRocket: boolean;
+  isFreeShipping: boolean;
 }
 
 interface ProductSearchResponse {
@@ -69,8 +81,18 @@ interface ProductSearchResponse {
   rMessage: string;
   data: {
     landingUrl: string;
-    productData: CoupangProduct[];
+    productData: RawCoupangProduct[];
   };
+}
+
+function extractItemId(productUrl: string): string {
+  const match = productUrl.match(/[?&]itemId=([^&]+)/);
+  return match ? match[1] : "0";
+}
+
+/** productId만으로는 같은 상품 페이지 안의 다른 구성(용량/수량)을 구분할 수 없어 itemId까지 합쳐 고유키로 쓴다. */
+export function itemKey(product: Pick<CoupangProduct, "productId" | "itemId">): string {
+  return `${product.productId}-${product.itemId}`;
 }
 
 export async function searchProducts(
@@ -80,7 +102,10 @@ export async function searchProducts(
   const query = `keyword=${encodeURIComponent(keyword)}&limit=${limit}`;
   const path = `/v2/providers/affiliate_open_api/apis/openapi/products/search?${query}`;
   const res = await request<ProductSearchResponse>("GET", path);
-  return res.data.productData;
+  return res.data.productData.map((p) => ({
+    ...p,
+    itemId: extractItemId(p.productUrl),
+  }));
 }
 
 interface DeeplinkResponse {
