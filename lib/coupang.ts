@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { assertWithinRateLimit } from "./rateLimit";
 
 const DOMAIN = "https://api-gateway.coupang.com";
 
@@ -35,6 +36,10 @@ function buildAuthHeader(method: string, pathWithQuery: string): string {
 }
 
 async function request<T>(method: string, pathWithQuery: string, body?: unknown): Promise<T> {
+  // 쿠팡 검색 API 실제 운영 제한(시간당 10회, 3회 초과 시 계정 자체 제한)에
+  // 절대 닿지 않도록 모든 API 호출은 여기를 반드시 통과한다.
+  assertWithinRateLimit();
+
   const authorization = buildAuthHeader(method, pathWithQuery);
 
   const res = await fetch(`${DOMAIN}${pathWithQuery}`, {
