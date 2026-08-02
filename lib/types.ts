@@ -7,10 +7,15 @@ export interface Deal {
   title: string;
   image: string;
   category: Category;
+  /** 쿠팡 판매가 (구성 전체 총액) */
   price: number;
-  originalPrice: number;
-  discountRate: number;
-  isAllTimeLow: boolean;
+  /** 상품명에서 파싱한 구성 개수 */
+  quantity: number;
+  /** 개당가 = price / quantity (반올림) */
+  unitPrice: number;
+  /** 사용자가 입력한 개당 소비자가 대비 마진율(%) */
+  marginRate: number;
+  isRocket: boolean;
   url: string;
   updatedAt: string;
 }
@@ -24,6 +29,7 @@ export type PriceHistory = Record<string, PriceSnapshot[]>;
 
 export interface ReferencePriceEntry {
   title: string;
+  /** 사용자가 직접 조사해서 입력하는 "개당" 소비자가 */
   referencePrice: number;
 }
 

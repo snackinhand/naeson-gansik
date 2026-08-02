@@ -95,6 +95,18 @@ export function itemKey(product: Pick<CoupangProduct, "productId" | "itemId">): 
   return `${product.productId}-${product.itemId}`;
 }
 
+/**
+ * 상품명에서 구성 개수를 추정한다 (예: "밀키스 340ml, 24개" -> 24).
+ * 표준화된 필드가 없어 텍스트 휴리스틱이므로 오검출 가능성이 있다 —
+ * 잘못 파싱되면 data/overrides.json으로 quantity/unitPrice/marginRate를 직접 고정할 수 있다.
+ */
+export function parseQuantity(productName: string): number {
+  const matches = [...productName.matchAll(/(\d+)\s*(개입|개|캔|병|봉|입)/g)];
+  if (matches.length === 0) return 1;
+  const n = parseInt(matches[matches.length - 1][1], 10);
+  return n > 0 ? n : 1;
+}
+
 export async function searchProducts(
   keyword: string,
   limit = 20

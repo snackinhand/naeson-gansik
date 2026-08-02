@@ -37,8 +37,9 @@ export function DealBoard({ deals }: { deals: Deal[] }) {
 
       {filtered.length === 0 ? (
         <p className="py-20 text-center text-zinc-400">
-          아직 등록된 핫딜이 없습니다. `npm run fetch-prices`로 후보를 조회한 뒤
-          data/deals.json에 추가해보세요.
+          아직 등록된 핫딜이 없습니다. data/reference-prices.json에 개당 소비자가를
+          등록하면 `npm run auto-publish` 실행 시 마진율이 기준을 넘는 상품만 자동으로
+          채워집니다.
         </p>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

@@ -1,6 +1,6 @@
 import path from "path";
 import { collectPriceSnapshots, today } from "../lib/priceHistory";
-import { itemKey } from "../lib/coupang";
+import { itemKey, parseQuantity } from "../lib/coupang";
 
 try {
   process.loadEnvFile(path.join(process.cwd(), ".env.local"));
@@ -34,18 +34,24 @@ async function main() {
       "\n실제로 발행할 상품은 아래 JSON을 골라 data/deals.json 배열에 추가하세요:\n"
     );
     hot.forEach((c) => {
+      const quantity = parseQuantity(c.product.productName);
+      const unitPrice = Math.round(c.product.productPrice / quantity);
       const snippet = {
         id: itemKey(c.product),
         title: c.product.productName,
         image: c.product.productImage,
         category: c.category,
         price: c.product.productPrice,
-        originalPrice: c.avg30d,
-        discountRate: Math.max(c.discountVsAvg, 0),
-        isAllTimeLow: c.isAllTimeLow,
+        quantity,
+        unitPrice,
+        marginRate: 0,
+        isRocket: c.product.isRocket,
         url: c.product.productUrl,
         updatedAt: today(),
       };
+      console.log(
+        `// 개당가 ${unitPrice.toLocaleString()}원 - 소비자가를 알고 있다면 reference-prices.json에 등록하거나 marginRate를 직접 계산해서 채우세요`
+      );
       console.log(JSON.stringify(snippet, null, 2) + ",");
     });
   }

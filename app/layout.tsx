@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { DisclosureNotice } from "@/components/DisclosureNotice";
+import { DisclosureBanner } from "@/components/DisclosureBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +29,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">
+        <DisclosureBanner />
         {children}
-        <footer className="border-t border-zinc-200 py-6 dark:border-zinc-800">
-          <DisclosureNotice />
-        </footer>
       </body>
     </html>
   );
