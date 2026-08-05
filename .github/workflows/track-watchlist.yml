@@ -1,0 +1,45 @@
+name: Track Watchlist
+
+on:
+  schedule:
+    # 3시간마다 (보수적으로 시작, 문제 없으면 나중에 주기를 줄인다)
+    - cron: "0 */3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: track-watchlist
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      # 다른 실행이 방금 커밋한 rate-limit/쿨다운 상태를 반드시 반영한 뒤 호출 여부를 판단해야 한다.
+      - name: Sync latest rate-limit state
+        run: git pull --ff-only origin main
+
+      - run: npm run track-watchlist
+        env:
+          COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
+          COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+
+      - name: Commit updated tracking state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/price-history.json data/margin-alerts.json .coupang-rate-limit.json .coupang-cooldown.json
+          git diff --staged --quiet || git commit -m "chore: track watchlist prices ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+          git pull --rebase origin main
+          git push

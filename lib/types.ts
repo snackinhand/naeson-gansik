@@ -36,3 +36,26 @@ export interface ReferencePriceEntry {
 export type ReferencePrices = Record<string, ReferencePriceEntry>;
 
 export type Overrides = Record<string, Partial<Deal>>;
+
+/** 마진 급등 감시 대상 (최대 6개, scripts/add-watchlist.ts로 등록) */
+export interface WatchlistEntry {
+  /** itemKey(productId-itemId) */
+  id: string;
+  title: string;
+  /** 재검색에 사용할 검색어 (상품 단건 조회 API가 없어 검색으로 재매칭한다) */
+  keyword: string;
+  /** 개당 소비자가 (마진율 계산 기준) */
+  consumerPrice: number;
+  /** 쿠팡 파트너스 추적 링크 */
+  url: string;
+  registeredAt: string;
+}
+
+export type Watchlist = WatchlistEntry[];
+
+export interface MarginAlertState {
+  lastAlertAt: string;
+  lastMarginRate: number;
+}
+
+export type MarginAlerts = Record<string, MarginAlertState>;

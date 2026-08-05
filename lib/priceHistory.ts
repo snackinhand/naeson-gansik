@@ -33,6 +33,16 @@ export function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** 워치리스트 등 단일 상품 추적용: id 하나의 오늘자 스냅샷만 append한다. */
+export function appendPriceSnapshot(id: string, price: number): PriceHistory[string] {
+  const history = loadHistory();
+  const snapshots = history[id] ?? [];
+  snapshots.push({ date: today(), price });
+  history[id] = snapshots;
+  saveHistory(history);
+  return snapshots;
+}
+
 /**
  * 추적 키워드 목록으로 쿠팡 상품을 검색하고 price-history.json에 오늘자 스냅샷을 append한다.
  * fetch-prices.ts(사람이 훑어보는 후보 출력)와 auto-publish.ts(자동 발행)가 공유하는 데이터 수집 단계.
