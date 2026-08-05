@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.coupangcdn.com",
       },
+      {
+        protocol: "https",
+        hostname: "ads-partners.coupang.com",
+      },
     ],
     dangerouslyAllowSVG: true,
   },
