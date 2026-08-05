@@ -92,7 +92,15 @@ async function main() {
       continue;
     }
 
-    const quantity = parseQuantity(product.productName);
+    const detectedQuantity = parseQuantity(product.productName);
+    const overrideInput = (
+      await rl.question(
+        `자동 감지된 구성 개수: ${detectedQuantity}개. 실제 개수가 다르면 입력하세요 (맞으면 엔터): `
+      )
+    ).trim();
+    const quantityOverride = overrideInput ? parseInt(overrideInput.replace(/[^0-9]/g, ""), 10) : undefined;
+    const quantity = quantityOverride || detectedQuantity;
+
     const unitPrice = Math.round(product.productPrice / quantity);
     const marginRate = Math.round(((consumerPrice - unitPrice) / consumerPrice) * 100);
     console.log(`현재 마진율: ${marginRate}% (개당 ${unitPrice.toLocaleString()}원 기준)\n`);
@@ -104,6 +112,7 @@ async function main() {
       keyword,
       consumerPrice,
       url: product.productUrl,
+      ...(quantityOverride ? { quantityOverride } : {}),
       registeredAt: today(),
     });
     saveWatchlist(next);

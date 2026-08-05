@@ -48,6 +48,12 @@ export interface WatchlistEntry {
   consumerPrice: number;
   /** 쿠팡 파트너스 추적 링크 */
   url: string;
+  /**
+   * 상품명에 구성 개수가 없어 parseQuantity가 매번 잘못 추정하는 경우(예: 개수별
+   * 옵션은 있지만 제목엔 안 적힌 상품) 실제 개수를 고정하기 위한 값. 없으면
+   * parseQuantity(productName)을 그대로 쓴다.
+   */
+  quantityOverride?: number;
   registeredAt: string;
 }
 

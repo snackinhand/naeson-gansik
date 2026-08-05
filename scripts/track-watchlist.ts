@@ -37,11 +37,11 @@ async function sendNtfyAlert(params: {
   title: string;
   message: string;
   url: string;
-}): Promise<void> {
+}): Promise<boolean> {
   const topic = process.env.NTFY_TOPIC;
   if (!topic) {
     console.warn("NTFY_TOPIC이 설정되어 있지 않아 알림을 보내지 않습니다.");
-    return;
+    return false;
   }
 
   const res = await fetch("https://ntfy.sh/", {
@@ -59,7 +59,9 @@ async function sendNtfyAlert(params: {
 
   if (!res.ok) {
     console.warn(`ntfy 알림 전송 실패 (${res.status}): ${await res.text()}`);
+    return false;
   }
+  return true;
 }
 
 async function main() {
@@ -94,7 +96,7 @@ async function main() {
 
     appendPriceSnapshot(entry.id, product.productPrice);
 
-    const quantity = parseQuantity(product.productName);
+    const quantity = entry.quantityOverride ?? parseQuantity(product.productName);
     const unitPrice = Math.round(product.productPrice / quantity);
     const marginRate = Math.round(
       ((entry.consumerPrice - unitPrice) / entry.consumerPrice) * 100
@@ -115,7 +117,7 @@ async function main() {
       continue;
     }
 
-    await sendNtfyAlert({
+    const sent = await sendNtfyAlert({
       title: `마진 급등: ${entry.title}`,
       message:
         `${entry.title}\n` +
@@ -124,8 +126,12 @@ async function main() {
       url: entry.url,
     });
 
-    alerts[entry.id] = { lastAlertAt: new Date().toISOString(), lastMarginRate: marginRate };
-    console.log(`  -> 마진 ${marginRate}% 알림 전송`);
+    if (sent) {
+      alerts[entry.id] = { lastAlertAt: new Date().toISOString(), lastMarginRate: marginRate };
+      console.log(`  -> 마진 ${marginRate}% 알림 전송`);
+    } else {
+      console.log(`  -> 마진 ${marginRate}%로 알림 기준 충족했지만 전송 실패 (쿨다운 미기록)`);
+    }
   }
 
   writeJson(ALERTS_PATH, alerts);
