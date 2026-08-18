@@ -12,7 +12,8 @@
     "set-price": "tsx scripts/set-price.ts",
     "add-deal": "tsx scripts/add-deal.ts",
     "add-watchlist": "tsx scripts/add-watchlist.ts",
-    "track-watchlist": "tsx scripts/track-watchlist.ts"
+    "track-watchlist": "tsx scripts/track-watchlist.ts",
+    "monitor-accatoy": "tsx scripts/monitor-accatoy.ts"
   },
   "dependencies": {
     "next": "16.2.12",
