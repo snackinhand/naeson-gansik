@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { searchAccatoy } from "../lib/accatoy";
+import { sendTelegramAlert } from "../lib/notify";
 
 try {
   process.loadEnvFile(path.join(process.cwd(), ".env.local"));
@@ -26,37 +27,6 @@ function writeState(state: WatchState) {
   fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2) + "\n");
 }
 
-async function sendNtfyAlert(params: {
-  title: string;
-  message: string;
-  url: string;
-}): Promise<boolean> {
-  const topic = process.env.NTFY_TOPIC;
-  if (!topic) {
-    console.warn("NTFY_TOPIC이 설정되어 있지 않아 알림을 보내지 않습니다.");
-    return false;
-  }
-
-  const res = await fetch("https://ntfy.sh/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      topic,
-      title: params.title,
-      message: params.message,
-      priority: 4,
-      tags: ["sparkles"],
-      click: params.url,
-    }),
-  });
-
-  if (!res.ok) {
-    console.warn(`ntfy 알림 전송 실패 (${res.status}): ${await res.text()}`);
-    return false;
-  }
-  return true;
-}
-
 async function main() {
   const state = readState();
 
@@ -78,7 +48,7 @@ async function main() {
 
     for (const p of newOnes) {
       const priceText = p.price ? `\n${p.price.toLocaleString()}원` : "";
-      const sent = await sendNtfyAlert({
+      const sent = await sendTelegramAlert({
         title: `아카토이 신규 등록: ${keyword}`,
         message: `${p.name}${priceText}`,
         url: p.url,
