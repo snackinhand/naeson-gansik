@@ -29,15 +29,6 @@ jobs:
 
       - run: npm ci
 
-      # TEMP DEBUG: GitHub Actions 러너 IP에서 ntfy로 보낸 알림이 실제로 수신되는지 확인용. 확인 후 제거 예정.
-      - name: Debug - send test ntfy alert from GitHub Actions
-        env:
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-        run: |
-          curl -s -X POST "https://ntfy.sh/" \
-            -H "Content-Type: application/json" \
-            -d "{\"topic\":\"$NTFY_TOPIC\",\"title\":\"GH Actions 디버그 테스트\",\"message\":\"이 알림이 오면 GitHub Actions 러너에서도 정상 전송됩니다\",\"priority\":4,\"tags\":[\"test_tube\"]}"
-
       # 다른 실행이 방금 커밋한 감시 상태를 반드시 반영한 뒤 비교해야 중복 알림이 안 생긴다.
       - name: Sync latest watch state
         run: git pull --ff-only origin main
