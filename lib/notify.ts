@@ -11,8 +11,7 @@ export async function sendTelegramAlert(params: {
     return false;
   }
 
-  const text =
-    `*${escapeMarkdown(params.title)}*\n${escapeMarkdown(params.message)}\n${params.url}`;
+  const text = `${params.title}\n${params.message}\n${params.url}`;
 
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
@@ -20,8 +19,6 @@ export async function sendTelegramAlert(params: {
     body: JSON.stringify({
       chat_id: chatId,
       text,
-      parse_mode: "MarkdownV2",
-      disable_web_page_preview: false,
     }),
   });
 
@@ -30,9 +27,4 @@ export async function sendTelegramAlert(params: {
     return false;
   }
   return true;
-}
-
-/** MarkdownV2에서 특수문자로 취급되는 문자를 이스케이프한다. */
-function escapeMarkdown(text: string): string {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\\$&");
 }
