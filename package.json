@@ -13,7 +13,8 @@
     "add-deal": "tsx scripts/add-deal.ts",
     "add-watchlist": "tsx scripts/add-watchlist.ts",
     "track-watchlist": "tsx scripts/track-watchlist.ts",
-    "monitor-accatoy": "tsx scripts/monitor-accatoy.ts"
+    "monitor-accatoy": "tsx scripts/monitor-accatoy.ts",
+    "monitor-ownerspick": "tsx scripts/monitor-ownerspick.ts"
   },
   "dependencies": {
     "next": "16.2.12",
@@ -27,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.4",
     "typescript": "^5"
