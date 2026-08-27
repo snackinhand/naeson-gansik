@@ -2,12 +2,13 @@ name: Monitor Accatoy
 
 on:
   schedule:
-    # 07:00~19:00 KST(=UTC 22:00~10:00)에만 5분마다.
+    # 평일 08:00~19:00 KST(=UTC 23:00~10:00)에만 5분마다.
     # GitHub Actions 크론은 UTC 기준이라 날짜가 넘어가는 구간을 세 줄로 나눠 표현했다.
+    # KST 요일 기준 평일(월~금)이 되려면 UTC 23시대는 하루 전 요일(일~목)을 써야 한다.
     # (5분은 GitHub Actions 스케줄 크론의 최소 지원 간격. 혼잡한 시간대엔 실제 실행이 더 밀릴 수 있음)
-    - cron: "*/5 22,23 * * *"
-    - cron: "*/5 0-9 * * *"
-    - cron: "0 10 * * *"
+    - cron: "*/5 23 * * 0-4"
+    - cron: "*/5 0-9 * * 1-5"
+    - cron: "0 10 * * 1-5"
   workflow_dispatch: {}
 
 permissions:
