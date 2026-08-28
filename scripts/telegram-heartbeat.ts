@@ -8,8 +8,8 @@ try {
 }
 
 /**
- * 실제로 메시지를 보내지 않고 봇 토큰/채팅방 유효성만 조용히 검사한다.
- * 평소엔 텔레그램으로 아무 알림도 가지 않고, 문제가 있을 때만 경고 메시지를 보낸다.
+ * 매시간 클라우드 헬스체크 루틴이 이 워크플로를 호출해서 상태 요약을 텔레그램으로 보낸다.
+ * 알림이 안 오는 것 자체가 "뭔가 이상하다"는 신호가 되도록 항상 메시지를 보낸다.
  */
 async function main() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -20,32 +20,19 @@ async function main() {
     process.exit(1);
   }
 
-  const getMeRes = await fetch(`https://api.telegram.org/bot${token}/getMe`);
-  const getChatRes = await fetch(
-    `https://api.telegram.org/bot${token}/getChat?chat_id=${encodeURIComponent(chatId)}`
-  );
+  const summary = process.env.STATUS_SUMMARY?.trim() || "특이사항 없음";
+  const ok = process.env.STATUS_OK !== "false";
 
-  if (getMeRes.ok && getChatRes.ok) {
-    console.log("텔레그램 봇 토큰/채팅방 정상. 알림 없이 종료합니다.");
-    return;
-  }
-
-  const detail = [
-    !getMeRes.ok ? `getMe ${getMeRes.status}: ${await getMeRes.text()}` : null,
-    !getChatRes.ok ? `getChat ${getChatRes.status}: ${await getChatRes.text()}` : null,
-  ]
-    .filter(Boolean)
-    .join(" / ");
-
-  console.error(`텔레그램 하트비트 실패: ${detail}`);
-
-  await sendTelegramAlert({
-    title: "⚠️ 텔레그램 하트비트 실패",
-    message: `봇 토큰 또는 채팅방 확인이 필요합니다.\n${detail}`,
-    url: "https://github.com/snackinhand/naeson-gansik/actions/workflows/telegram-heartbeat.yml",
+  const sent = await sendTelegramAlert({
+    title: ok ? "✅ 모니터링 정상 동작 중" : "⚠️ 모니터링 문제 감지",
+    message: summary,
+    url: "https://github.com/snackinhand/naeson-gansik/actions",
   });
 
-  process.exit(1);
+  if (!sent) {
+    console.error("텔레그램 하트비트 메시지 전송 실패");
+    process.exit(1);
+  }
 }
 
 main();

@@ -1,7 +1,16 @@
 name: Telegram Heartbeat
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      status_summary:
+        description: "상태 요약 (클라우드 헬스체크 루틴이 채워줌)"
+        required: false
+        default: "특이사항 없음"
+      status_ok:
+        description: "true면 정상, false면 문제 감지"
+        required: false
+        default: "true"
 
 permissions:
   contents: read
@@ -22,3 +31,5 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATUS_SUMMARY: ${{ inputs.status_summary }}
+          STATUS_OK: ${{ inputs.status_ok }}
