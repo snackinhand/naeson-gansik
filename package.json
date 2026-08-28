@@ -14,7 +14,8 @@
     "add-watchlist": "tsx scripts/add-watchlist.ts",
     "track-watchlist": "tsx scripts/track-watchlist.ts",
     "monitor-accatoy": "tsx scripts/monitor-accatoy.ts",
-    "monitor-ownerspick": "tsx scripts/monitor-ownerspick.ts"
+    "monitor-ownerspick": "tsx scripts/monitor-ownerspick.ts",
+    "telegram-heartbeat": "tsx scripts/telegram-heartbeat.ts"
   },
   "dependencies": {
     "next": "16.2.12",
