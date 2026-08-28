@@ -3,7 +3,8 @@ name: Monitor Ownerspick
 on:
   schedule:
     # 24시간, 30분마다.
-    - cron: "*/30 * * * *"
+    # 정각/30분(:00,:30)은 GitHub 전역 혼잡 시각이라 스케줄이 자주 드롭돼서 오프셋을 줬다.
+    - cron: "7,37 * * * *"
   workflow_dispatch: {}
 
 permissions:
