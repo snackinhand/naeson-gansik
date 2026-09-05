@@ -36,32 +36,3 @@ export interface ReferencePriceEntry {
 export type ReferencePrices = Record<string, ReferencePriceEntry>;
 
 export type Overrides = Record<string, Partial<Deal>>;
-
-/** 마진 급등 감시 대상 (최대 6개, scripts/add-watchlist.ts로 등록) */
-export interface WatchlistEntry {
-  /** itemKey(productId-itemId) */
-  id: string;
-  title: string;
-  /** 재검색에 사용할 검색어 (상품 단건 조회 API가 없어 검색으로 재매칭한다) */
-  keyword: string;
-  /** 개당 소비자가 (마진율 계산 기준) */
-  consumerPrice: number;
-  /** 쿠팡 파트너스 추적 링크 */
-  url: string;
-  /**
-   * 상품명에 구성 개수가 없어 parseQuantity가 매번 잘못 추정하는 경우(예: 개수별
-   * 옵션은 있지만 제목엔 안 적힌 상품) 실제 개수를 고정하기 위한 값. 없으면
-   * parseQuantity(productName)을 그대로 쓴다.
-   */
-  quantityOverride?: number;
-  registeredAt: string;
-}
-
-export type Watchlist = WatchlistEntry[];
-
-export interface MarginAlertState {
-  lastAlertAt: string;
-  lastMarginRate: number;
-}
-
-export type MarginAlerts = Record<string, MarginAlertState>;
